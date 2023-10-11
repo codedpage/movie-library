@@ -1,0 +1,8 @@
+<movies>
+  <movie title="Betty-10" genre ="crime" releaseDate="01-10-2023" />
+  <movie title="Betty-20" genre ="sci-fi" releaseDate="01-10-2023" />
+  <movie title="Betty-30" genre="drama" releaseDate="01-10-2023" />
+  <movie title="Betty-40" genre="drama" releaseDate="01-10-2023" />
+  <movie title="Betty-50" genre="drama" releaseDate="01-10-2023" />
+  <movie title="Betty-60" genre="drama" releaseDate="01-10-2023" />
+</movies>

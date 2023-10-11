@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package movie_library;
+
+
+option go_package = ".";
+
+
+service MovieLibraryService {
+  rpc LoadMovies(MovieRequest) returns (MovieResponse);
+  rpc GetMovieDetails(GetMovieDetailsRequest) returns (GetMovieDetailsResponse);
+  rpc UpdateMovieDetails(UpdateMovieDetailsRequest) returns (UpdateMovieDetailsResponse);
+}
+
+message Movie {
+  string title = 1;
+  string genre = 2;
+  string releaseDate = 3;
+}
+
+message MovieRequest {
+  repeated Movie movies = 1;
+}
+
+message MovieResponse {
+  int32 status_code = 1;
+}
+
+message GetMovieDetailsRequest {
+  string release_date = 1;
+}
+
+message GetMovieDetailsResponse {
+  repeated Movie movies = 1;
+}
+
+message UpdateMovieDetailsRequest {
+  int32 movie_id = 1;
+  Movie updated_movie = 2;
+}
+
+message UpdateMovieDetailsResponse {
+  int32 status_code = 1;
+  Movie updated_movie = 2;
+}
