@@ -1,0 +1,101 @@
+{
+	"info": {
+		"_postman_id": "8fe40165-7a7a-4480-a836-745f0182a8f9",
+		"name": "gRpc",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "load",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "<movies>\r\n\t<movie title=\"Betty-1\" genre=\"crime\" releaseDate=\"01-10-2023\" />\r\n\t<movie title=\"Betty-2\" genre=\"sci-fi\" releaseDate=\"01-10-2023\" />\r\n\t<movie title=\"Betty-3\" genre=\"drama\" releaseDate=\"01-10-2023\" /> \r\n</movies>",
+					"options": {
+						"raw": {
+							"language": "html"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/movie-library/load",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"movie-library",
+						"load"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "html"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/movie-library/movie/02-10-2023",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"movie-library",
+						"movie",
+						"02-10-2023"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "html"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/movie-library/movie/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"movie-library",
+						"movie",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
