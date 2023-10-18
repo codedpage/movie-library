@@ -1,8 +1,8 @@
 -How to use
 
 #u1
-go run main.go //with default value
-go run main.go -file hindi.xml -genre drama //with custom value
+- go run main.go //with default value
+- go run main.go -file hindi.xml -genre drama //with custom value
 
 
 #u2, u3 and u4
