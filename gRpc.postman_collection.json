@@ -12,7 +12,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "<movies>\r\n\t<movie title=\"Betty-1\" genre=\"crime\" releaseDate=\"01-10-2023\" />\r\n\t<movie title=\"Betty-2\" genre=\"sci-fi\" releaseDate=\"01-10-2023\" />\r\n\t<movie title=\"Betty-3\" genre=\"drama\" releaseDate=\"01-10-2023\" /> \r\n</movies>",
+					"raw": "<movies>\r\n\t<movie title=\"Betty-1\" genre=\"crime\" releaseDate=\"01-10-2023\" />\r\n\t<movie title=\"Betty-2\" genre=\"sci-fi\" releaseDate=\"01-10-2023\" />\r\n\t<movie title=\"Betty-3\" genre=\"drama\" releaseDate=\"01-10-2023\" /> \r\n    <movie title=\"Betty-4\" genre=\"drama\" releaseDate=\"01-11-2023\" /> \r\n</movies>",
 					"options": {
 						"raw": {
 							"language": "html"
@@ -52,7 +52,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/movie-library/movie/02-10-2023",
+					"raw": "http://localhost:8080/movie-library/movie/",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -61,7 +61,7 @@
 					"path": [
 						"movie-library",
 						"movie",
-						"02-10-2023"
+						""
 					]
 				}
 			},
@@ -74,7 +74,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "",
+					"raw": "<movies>\r\n\t<movie title=\"Betty-102\" genre=\"crime\" releaseDate=\"01-10-2023\" />\t\r\n</movies>",
 					"options": {
 						"raw": {
 							"language": "html"
@@ -82,7 +82,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/movie-library/movie/1",
+					"raw": "http://localhost:8080/movie-library/movie/2",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -91,7 +91,7 @@
 					"path": [
 						"movie-library",
 						"movie",
-						"1"
+						"2"
 					]
 				}
 			},

@@ -2,18 +2,25 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net"
 	"net/http"
+	"os"
 
 	pb "movie/proto"
 
+	"github.com/joho/godotenv"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/reflection"
-	"google.golang.org/grpc/status"
 )
+
+type Movie struct {
+	Title       string `json:"title"`
+	Genre       string `json:"genre"`
+	ReleaseDate string `json:"releaseDate"`
+}
 
 type movieLibraryServer struct {
 	pb.UnimplementedMovieLibraryServiceServer // Embed the "unimplemented" gRPC server
@@ -25,7 +32,10 @@ func (s *movieLibraryServer) LoadMovies(ctx context.Context, req *pb.MovieReques
 	// Reset the movie library by overwriting the existing movies.
 	s.movies = req.Movies
 
-	fmt.Println(req.Movies)
+	JsonFilePath := os.Getenv("JSON_FILE_PATH")
+	f, _ := os.Create(JsonFilePath)
+	data, _ := json.Marshal(req.Movies)
+	_ = os.WriteFile(f.Name(), data, 0644)
 
 	return &pb.MovieResponse{
 		StatusCode: http.StatusResetContent,
@@ -33,29 +43,42 @@ func (s *movieLibraryServer) LoadMovies(ctx context.Context, req *pb.MovieReques
 }
 
 // u3
-var movieData = map[string]*pb.Movie{
-	"01-10-2023": {
-		Title:       "Betty-2",
-		Genre:       "sci-fi",
-		ReleaseDate: "01-10-2023",
-	},
-	"02-10-2023": {
-		Title:       "Betty-3",
-		Genre:       "sci-fi",
-		ReleaseDate: "02-10-2023",
-	},
-}
-
 func (s *movieLibraryServer) GetMovieDetails(ctx context.Context, req *pb.GetMovieDetailsRequest) (*pb.GetMovieDetailsResponse, error) {
 	releaseDate := req.ReleaseDate
 
-	movie, exists := movieData[releaseDate]
-	if !exists {
-		return nil, status.Errorf(codes.NotFound, "Movie not found for release date: %s", releaseDate)
+	JsonFilePath := os.Getenv("JSON_FILE_PATH")
+	data, err := os.ReadFile(JsonFilePath)
+	if err != nil {
+		fmt.Println("Error reading JSON file:", err)
+		os.Exit(1)
+	}
+
+	// Parse the JSON data into a slice of Movie structs
+	var movies []Movie
+	if err := json.Unmarshal(data, &movies); err != nil {
+		fmt.Println("Error parsing JSON:", err)
+		os.Exit(1)
+	}
+
+	// Query movies based on the provided release date
+	var matchingMovies []*pb.Movie
+	for _, movie := range movies {
+		if releaseDate == "" || releaseDate == movie.ReleaseDate {
+			// Construct a pb.Movie for each matching movie
+			matchingMovies = append(matchingMovies, &pb.Movie{
+				Title:       movie.Title,
+				Genre:       movie.Genre,
+				ReleaseDate: movie.ReleaseDate,
+			})
+		}
+	}
+
+	for _, movie := range matchingMovies {
+		fmt.Printf("Title: %s, Genre: %s, Release Date: %s\n", movie.Title, movie.Genre, movie.ReleaseDate)
 	}
 
 	return &pb.GetMovieDetailsResponse{
-		Movies: []*pb.Movie{movie},
+		Movies: matchingMovies, // Use the matchingMovies slice
 	}, nil
 }
 
@@ -71,13 +94,35 @@ var movieDataMap = map[int32]*pb.Movie{
 func (s *movieLibraryServer) UpdateMovieDetails(ctx context.Context, req *pb.UpdateMovieDetailsRequest) (*pb.UpdateMovieDetailsResponse, error) {
 	movieID := req.MovieId
 
-	// Check if the movie exists
-	if _, exists := movieDataMap[movieID]; !exists {
-		return nil, status.Errorf(codes.NotFound, "Movie with ID %d not found", movieID)
+	JsonFilePath := os.Getenv("JSON_FILE_PATH")
+	data, err := os.ReadFile(JsonFilePath)
+	if err != nil {
+		fmt.Println("Error reading JSON file:", err)
+		os.Exit(1)
 	}
 
-	// Update the movie details
-	movieDataMap[movieID] = req.UpdatedMovie
+	var movies []map[string]interface{}
+	if err := json.Unmarshal([]byte(data), &movies); err != nil {
+		fmt.Println("Error parsing JSON:", err)
+
+	}
+
+	// Update the second element
+	if len(movies) >= 0 {
+		movieID = movieID - 1
+		movies[movieID]["title"] = req.UpdatedMovie.Title
+		movies[movieID]["genre"] = req.UpdatedMovie.Genre
+		movies[movieID]["releaseDate"] = req.UpdatedMovie.ReleaseDate
+	}
+
+	// Marshal the updated data back to JSON
+	updatedJSON, err := json.Marshal(movies)
+	if err != nil {
+		fmt.Println("Error marshaling JSON:", err)
+	}
+
+	f, _ := os.Open(JsonFilePath)
+	_ = os.WriteFile(f.Name(), updatedJSON, 0644)
 
 	// Respond with the updated movie
 	return &pb.UpdateMovieDetailsResponse{
@@ -92,6 +137,8 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to listen: %v", err)
 	}
+
+	godotenv.Load(".env")
 
 	server := grpc.NewServer()
 	pb.RegisterMovieLibraryServiceServer(server, &movieLibraryServer{})
