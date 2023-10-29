@@ -214,13 +214,12 @@ func apiHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "gRPC api ready!!!")
 }
 
-
 func main() {
 
 	http.HandleFunc("/", apiHandler)
 	http.HandleFunc("/movie-library/load", loadMovieLibrary)
 	http.HandleFunc("/movie-library/movie/", getUpdateMovieLibrary)
 	port := ":8080"
-    fmt.Printf("gRPC client is listening on port %s...\n", port)
+	fmt.Printf("gRPC client is listening on port %s...\n", port)
 	http.ListenAndServe(port, nil)
 }
