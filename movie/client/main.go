@@ -210,9 +210,17 @@ func getUpdateMovieLibrary(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func apiHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprint(w, "gRPC api ready!!!")
+}
+
+
 func main() {
+
+	http.HandleFunc("/", apiHandler)
 	http.HandleFunc("/movie-library/load", loadMovieLibrary)
 	http.HandleFunc("/movie-library/movie/", getUpdateMovieLibrary)
-
-	http.ListenAndServe(":8080", nil)
+	port := ":8080"
+    fmt.Printf("gRPC client is listening on port %s...\n", port)
+	http.ListenAndServe(port, nil)
 }
