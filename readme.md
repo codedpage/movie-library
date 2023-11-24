@@ -1,5 +1,8 @@
 -How to use
 
+#Generate proto files
+- go to movie/proto folder and run `protoc --go_out=. --go-grpc_out=. movie.proto`
+
 #u1
 - go run main.go //with default value
 - go run main.go -file hindi.xml -genre drama //with custom value
