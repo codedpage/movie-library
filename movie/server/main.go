@@ -139,6 +139,7 @@ func main() {
 	}
 
 	godotenv.Load(".env")
+	fmt.Println(os.Getenv("JSON_FILE_PATH"))
 
 	server := grpc.NewServer()
 	pb.RegisterMovieLibraryServiceServer(server, &movieLibraryServer{})
